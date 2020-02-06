@@ -16,11 +16,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <string.h>
 
 #define MAX_NR_TOKENS 32	/* Maximum number of tokens in a command */
 #define MAX_TOKEN_LEN 64	/* Maximum length of single token */
 #define MAX_COMMAND	256		/* Maximum length of command string */
-
+#define true 1
+#define false 0
 /***********************************************************************
  * parse_command
  *
@@ -53,42 +55,34 @@
  *	Return 0 after filling in @nr_tokens and @tokens[] properly
  *
  */
-static int parse_command(char *command, int *nr_tokens, char *tokens[]){
-	/* TODO
-	 * Followings are example code. You should delete them and implement 
-	 * your own code here
-	 */
-	int i=0, count=0;
-	char *temp=command;
-	int start=0;
-
-	while(temp[i]!='\0'){
-		if(temp[i]==' '||temp[i]=='\t'||temp[i]=='\n'){
-				
-			if(i==0){
-				while(temp[i]==' '||temp[i]=='\t'){
-					i++;	
-					start++;
-				}
-				continue;
-			}
-			while(temp[i+1]==' '||temp[i+1]=='\t'||temp[i+1]=='\n'){
-				i++;
-			}
-			temp[i]='\0';
-			if(temp[start]==' '||temp[start]=='\t'){
-				while(temp[start]=='\n'){
-				}	
-			}
-			tokens[count++]=temp+start;
-			start=i+1;
-			i++;
-
-		}
-		else
-			i++;
+static int separator(char *c){
+	char *separators = " \t\r\n";
+	for(int i=0;i<strlen(separators);i++){ 
+		if(*c==separators[i]) return true;
 	}
-	*nr_tokens=count;
+	return false;
+}
+static int parse_command(char *command, int *nr_tokens, char *tokens[]){
+	
+	char *cur=command;
+	int flag = 0;
+	*nr_tokens=0;
+
+	while(*cur!='\0'){
+		if(separator(cur)){
+			*cur='\0';
+			flag=false;
+		}
+		else{
+			if(!flag){
+				tokens[*nr_tokens]=cur;
+				*nr_tokens+=1;
+				flag=true;
+			}
+		}
+		cur++;
+	}
+
 	return 0;
 }
 
