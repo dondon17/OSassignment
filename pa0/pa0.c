@@ -56,12 +56,14 @@
  *
  */
 static int separator(char *c){
+
 	char *separators = " \t\r\n";
-	for(int i=0;i<strlen(separators);i++){ 
-		if(*c==separators[i]) return true;
-	}
+
+	for(int i=0;i<strlen(separators);i++) if(*c==separators[i]) return true;
+	
 	return false;
 }
+
 static int parse_command(char *command, int *nr_tokens, char *tokens[]){
 	
 	char *cur=command;
@@ -90,8 +92,8 @@ static int parse_command(char *command, int *nr_tokens, char *tokens[]){
 /***********************************************************************
  * The main function of this program. SHOULD NOT CHANGE THE CODE BELOW
  */
-int main(int argc, const char *argv[])
-{
+int main(int argc, const char *argv[]){
+
 	char line[MAX_COMMAND] = { '\0' };
 	FILE *input = stdin;
 
